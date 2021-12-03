@@ -22,8 +22,8 @@ def yourani():
         print("Ваши свиньи: ", player_ani.count("Свинья"))
         print("Ваши коровы: ", player_ani.count("Корова"))
         print("Ваши кони: ", player_ani.count("Конь"))
-        
-        # !!! тут могли бы быть Ваши собаки но их пока нет
+        print("Ваши бигли:", player_ani.count("Бигль"))
+        print("Ваши овчарки:", player_ani.count("Овчарка"))
 
 # функция отвечающая за ответ игрока
 
@@ -57,6 +57,16 @@ def answer():
               " - в свой ход вы производите обмен и получаете одну овцу, а ещё у вас остаётся один кролик (одна овца стоит 6 кроликов).")
         print("Пример №2: У Вас есть 1 овца, вы хотите получить 6 кроликов",
               " - к сожалению у вас ничего не получится, потому что овца дороже кроликов.")
+        print("\nТак же Вы можете потерять своих животный если:")
+        print("\n1) Вам выпала лиса - она съедает всех Ваших кроликов.")
+        print("Чтобы избежать нападения лисы вы можете купить бигля за овцу.")
+        print("ВАЖНО: Если у Вас был  бигль и Вам выпала лиса, то он защищает ваших кроликов, но и сам погибает.")
+        print("ВАЖНО: Ваш бигль не защитит ваших кроликов от волка.")
+        print("\n2) Вам выпал волк - съедает всех Ваших животных кроме коня.")
+        print("Чтобы избежать нападения волка вы можете купить овчарку за корову.")
+        print("ВАЖНО: Если у Вас была овчарка и Вам выпал волк, то она защищает ваших животных, но и сама погибает.")
+        print("ВАЖНО: Ваша овчарка не защитит ваших кроликов от лисы.")
+
         
         answer()
         
@@ -74,9 +84,6 @@ def answer():
             
             for i in range(app):
                 player_ani.append(cube_TR)
-                
-            print("\nТеперь у вас:")
-            yourani()
             
         else:
             app = (player_ani.count(cube_TR) + 1) // 2
@@ -90,42 +97,47 @@ def answer():
             
             for i in range(app):
                 player_ani.append(cube_TY)
-                
-            print("\nТеперь у вас:")
-            yourani()
             
         dli = 0
         
         if cube_TR == "Лиса":
             print("\nО нет! Вам выпала лиса! Она съедает всех ваших кроликов!")
-            dli = bot_ani.count("Кролик")
-            for i in range(dli):
-                bot_ani.remove("Кролик")
+            if player_ani.count("Бигль") >= 1:
+                print("\nВдруг тут появляется Ваш бигль и защищает Ваших кроликов от лисы!")
+                print("Но и сам героически погибает...")
+                player_ani.remove("Бигль")
+            else:
+                dli = player_ani.count("Кролик")
+                for i in range(dli):
+                    player_ani.remove("Кролик")
+
             
-            print("Теперь у Вас остались эти животные:")
-            yourani()
-            
-        elif cube_TY == "Волк":
+        if cube_TY == "Волк":
             print("\nО Боже! Вам выпал волк! Он съедает всех Ваших животных кроме коня!")
+            if player_ani.count("Овчарка") >= 1:
+                print("\nВдруг тут появляется Ваша овчарка и защищает Ваших животных от волка!")
+                print("Но и сама героически погибает...")
+                player_ani.remove("Овчарка")
+            else:            
+                dli = player_ani.count("Кролик")
+                for i in range(dli):
+                    player_ani.remove("Кролик")
+                
+                dli = player_ani.count("Овца")
+                for i in range(dli):
+                    player_ani.remove("Овца")
+                
+                dli = player_ani.count("Свинья")
+                for i in range(dli):
+                    player_ani.remove("Свинья")
+                
+                dli = player_ani.count("Корова")
+                for i in range(dli):
+                    player_ani.remove("Корова")
             
-            dli = player_ani.count("Кролик")
-            for i in range(dli):
-                player_ani.remove("Кролик")
-            
-            dli = player_ani.count("Овца")
-            for i in range(dli):
-                player_ani.remove("Овца")
-            
-            dli = player_ani.count("Свинья")
-            for i in range(dli):
-                player_ani.remove("Свинья")
-            
-            dli = player_ani.count("Корова")
-            for i in range(dli):
-                player_ani.remove("Корова")
-            
-            print("Теперь у Вас остались только эти животные:")
-            yourani()
+        print("\nТеперь у вас:")
+        yourani()
+        print("\n======================================================")
                 
     elif otvet == "ОБМЕН" or otvet == "3":
         print("\nДля выхода из режима обмена напишите 'выход'." )
@@ -143,10 +155,12 @@ def answer():
                         player_ani.append("Овца")
                     for i in range(obm[1] * 6):
                         player_ani.remove("Кролик")
-                        print("Операция прошла успешно!")
+                    print("\nОперация прошла успешно!")
+                    print("Теперь у вас:")
+                    yourani()
                         
                 else:
-                    print("Операция отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
+                    print("\nОперация отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
                 
             elif obm[0] == "СВИНЬЯ":
                 if player_ani.count("Овца") // 2 >= obm[1]:
@@ -154,10 +168,12 @@ def answer():
                         player_ani.append("Свинья")
                     for i in range(obm[1] * 2):
                         player_ani.remove("Овца")
-                        print("Операция прошла успешно!")
+                    print("\nОперация прошла успешно!")
+                    print("Теперь у вас:")
+                    yourani()
                         
                 else:
-                    print("Операция отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
+                    print("\nОперация отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
                         
             elif obm[0] == "КОРОВА":
                 if player_ani.count("Свинья") // 3 >= obm[1]:
@@ -165,10 +181,12 @@ def answer():
                         player_ani.append("Корова")
                     for i in range(obm[1] * 3):
                         player_ani.remove("Свинья")
-                        print("Операция прошла успешно!")
+                    print("\nОперация прошла успешно!")
+                    print("Теперь у вас:")
+                    yourani()
                         
                 else:
-                    print("Операция отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
+                    print("\nОперация отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
                         
             elif obm[0] == "КОНЬ":
                 if player_ani.count("Корова") // 2 >= obm[1]:
@@ -176,10 +194,38 @@ def answer():
                         player_ani.append("Конь")
                     for i in range(obm[1] * 2):
                         player_ani.remove("Корова")    
-                    print("Операция прошла успешно!")
+                    print("\nОперация прошла успешно!")
+                    print("Теперь у вас:")
+                    yourani()
                     
                 else:
-                    print("Операция отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
+                    print("\nОперация отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
+            
+            elif obm[0] == "БИГЛЬ":
+                if player_ani.count("Овца") >= obm[1]:
+                    for i in range(obm[1]):
+                        player_ani.append("Бигль")
+                    for i in range(obm[1]):
+                        player_ani.remove("Овца")    
+                    print("\nОперация прошла успешно!")
+                    print("Теперь у вас:")
+                    yourani()
+                    
+                else:
+                    print("\nОперация отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
+                    
+            elif obm[0] == "ОВЧАРКА":
+                if player_ani.count("Корова") >= obm[1]:
+                    for i in range(obm[1]):
+                        player_ani.append("Овчарка")
+                    for i in range(obm[1]):
+                        player_ani.remove("Корова")    
+                    print("\nОперация прошла успешно!")
+                    print("Теперь у вас:")
+                    yourani()
+                    
+                else:
+                    print("\nОперация отменилась! У Вас не хватает животных! Проробуйте ещё раз: ")
                     
             elif obm[0] == "ВЫХОД":
                 print("\nХорошо!")
@@ -196,13 +242,17 @@ def answer():
         print("2 овец на свинью")
         print("3 свиньи на корову")
         print("2 коровы на коня")
+        print("1 овца за бигля")
+        print("1 корова за овчарку")
         answer()
     
     elif otvet == "ЖИВОТНЫЕ" or otvet == "5":
         yourani()
+        answer()
         
     elif otvet == "HELP" or otvet == "6":
         helpme()
+        answer()
         
     else:
         print("\nЯ тебя не понимаю! Попробуй ввести ответ снова!")
@@ -222,6 +272,7 @@ def botani():
 def bot_move():
     print("\nХод компьютера!")
     delim = 0
+    obmen = 0
     while(True):
         if bot_ani.count("Конь") < 1:
             if bot_ani.count("Кролик") >= 6:
@@ -230,13 +281,14 @@ def bot_move():
                     bot_ani.append("Овца")
                 for i in range(delim * 6):
                     bot_ani.remove("Кролик")
-                    
+                obmen += 1
             elif bot_ani.count("Овца") >= 2:
                 delim = bot_ani.count("Овца") // 2
                 for i in range(delim):
                     bot_ani.append("Свинья")
                 for i in range(delim * 2):
                     bot_ani.remove("Овца")
+                obmen += 1
                     
             elif bot_ani.count("Свинья") >= 6:
                 delim = bot_ani.count("Свинья") // 3
@@ -244,6 +296,7 @@ def bot_move():
                     bot_ani.append("Корова")
                 for i in range(delim * 3):
                     bot_ani.remove("Свинья")
+                obmen += 1
             
             elif bot_ani.count("Корова") >= 2:
                 delim = bot_ani.count("Корова") // 2
@@ -251,6 +304,7 @@ def bot_move():
                     bot_ani.append("Конь")
                 for i in range(delim * 2):
                     bot_ani.remove("Корова")
+                obmen += 1
             else:
                 break
         else:
@@ -260,6 +314,7 @@ def bot_move():
                     bot_ani.append("Овца")
                 for i in range(delim * 6):
                     bot_ani.remove("Кролик")
+                obmen += 1
                     
             elif bot_ani.count("Овца") >= 2 and (bot_ani.count("Корова") == 0 or bot_ani.count("Свинья") == 0):
                 delim = bot_ani.count("Овца") // 2
@@ -267,6 +322,7 @@ def bot_move():
                     bot_ani.append("Свинья")
                 for i in range(delim * 2):
                     bot_ani.remove("Овца")
+                obmen += 1
                     
             elif bot_ani.count("Свинья") >= 3 and bot_ani.count("Корова") == 0:
                 delim = bot_ani.count("Свинья") // 3
@@ -274,12 +330,14 @@ def bot_move():
                     bot_ani.append("Корова")
                 for i in range(delim * 3):
                     bot_ani.remove("Свинья")
+                obmen += 1
 
             else:
                 break
-                
-    print("\nКомпьютер произвёл обмен! Теперь у него:")
-    botani()    
+    
+    if obmen >= 1:
+        print("\nКомпьютер произвёл обмен! Теперь у него:")
+        botani()    
     
     print("\nБот кидает кубики!")
     
@@ -295,9 +353,6 @@ def bot_move():
             
         for i in range(app):
             bot_ani.append(cube_TR)
-                
-        print("\nТеперь у компьютера:")
-        botani()
             
     else:
         app = (bot_ani.count(cube_TR) + 1) // 2
@@ -311,9 +366,6 @@ def bot_move():
             
         for i in range(app):
             bot_ani.append(cube_TY)
-            
-        print("\nТеперь у компьютера:")
-        botani()
     
     dli = 0
         
@@ -322,11 +374,8 @@ def bot_move():
         dli = bot_ani.count("Кролик")
         for i in range(dli):
             bot_ani.remove("Кролик")
-            
-        print("Теперь у бота остались эти животные:")
-        botani()
         
-    elif cube_TY == "Волк":
+    if cube_TY == "Волк":
         print("\nАхаха! Боту выпал волк! Он съедает всех его животных кроме коня!")
         dli = bot_ani.count("Кролик")
         for i in range(dli):
@@ -344,8 +393,9 @@ def bot_move():
         for i in range(dli):
             bot_ani.remove("Корова")
             
-        print("Теперь у бота остались только эти животные:")
-        botani()
+    print("\nТеперь у компьютера:")
+    botani()
+    print("\n======================================================")
         
 # животные которые есть на жёлтом и красном кубике
 
@@ -356,13 +406,13 @@ cube_R = ["Лиса", "Свинья", "Кролик", "Овца", "Кролик"
 
 # животные которые есть у игрока и компьютера
 
-player_ani = ["Корова", "Корова"]
+player_ani = []
 bot_ani = []
 
 # корпус
     
 print("                            SUPER FARMER")
-print("Version: Pre-alpha")
+print("Version: Beta")
 print("\n\nПривет!") 
 
 while(True):
@@ -376,19 +426,17 @@ while(True):
         print("\nНАЧАЛО ИГРЫ")
         print("\n======================================================")
         print("\nТвой ход!")        
-        
-        win_pl = player_ani.count("Кролик") and player_ani.count("Овца") and player_ani.count("Свинья") and player_ani.count("Корова") and player_ani.count("Конь")
-        win_bot = bot_ani.count("Кролик") and bot_ani.count("Овца") and bot_ani.count("Свинья") and bot_ani.count("Корова") and bot_ani.count("Конь")
-        
-        while(not(win_pl) or not(win_bot)):
+             
+        while(True):
             answer()
+            if player_ani.count("Кролик") >= 1 and player_ani.count("Овца") >= 1 and player_ani.count("Свинья") >= 1 and player_ani.count("Корова") >= 1 and player_ani.count("Конь") >= 1:
+                print("\nПоздравляю с победой!\nХорошая игра!")
+                break
+            
             bot_move()
-            
-        if win_pl:
-            print("\nПоздравляю с победой!\n Хорошая игра!")
-            
-        elif win_bot:
-            print("\nВы проиграли( \nВ другой раз повезёт!")
+            if bot_ani.count("Кролик") >= 1 and bot_ani.count("Овца") >= 1 and bot_ani.count("Свинья") >= 1 and bot_ani.count("Корова") >= 1 and bot_ani.count("Конь") >= 1:
+                print("\nВы проиграли(\nВ другой раз повезёт!")
+                break
         
     elif ans == "НЕТ":
         print("\nЖаль! Тогда пока!")
@@ -402,6 +450,6 @@ while(True):
 # Дабавить бросок кубиков игрока DONE
 # Добавить отбражение количества животных игрока после обена и броска кубиков DONE
 # Добавить ход ИИ DONE
-# Добавить собак
-# Добавить режим для нескольких игроков
-# Оптимизировать
+# Добавить собак DONE
+# Добавить режим для нескольких игроков I DON'T WANT DO IT
+# Оптимизировать I DON'T WANT DO IT
